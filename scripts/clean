@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
+
+set -v
 # Remove generated files from the source tree
 
 # quick sanity check: Are we in the top-level directory?
 for dir in dvips enc fontinst kerning scripts tex; do
+    echo dir is $dir
     if [[ ! -d $dir ]]; then
 	echo "Wrong directory? $PWD" >&2
-	exit 1
+#	exit 1
     fi
 done
 

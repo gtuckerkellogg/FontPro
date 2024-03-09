@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 vendor=adobe
-font=`cat fontname`
 
-dir="$1"
+font="$1"
+dir="$2"
 
 if [ "x$dir" = x ]
 then
@@ -39,9 +39,9 @@ doc_dir="$dir/doc/latex/$font"
 
 mkdir -p "$enc_dir" "$map_dir" "$pfb_dir" "$tfm_dir" "$vf_dir" "$tex_dir" "$doc_dir"
 
-cp pfb/*.pfb          "$pfb_dir"
+cp -v pfb/*.pfb          "$pfb_dir"
 cp dvips/*.enc        "$enc_dir"
-cp "dvips/$font.map"  "$map_dir"
+cp -v "dvips/$font.map"  "$map_dir"
 cp tex/*.{sty,cfg,fd} "$tex_dir"
 
 if [ -e "doc/$font.pdf" ]

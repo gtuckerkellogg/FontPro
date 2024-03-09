@@ -31,8 +31,9 @@ ADDPACK=""
 case "$*" in
     *--pack*) echo Using explicitly given glyph list;;
     *)  fontver=$(get_font_version otf/${ffamily}-Regular.otf)
+	echo font version is $fontver
 	uniquefv=true
-	for ff in otf/*otf; do
+	for ff in otf/${ffamily}*otf; do
 	    if [ "$fontver" != "$(get_font_version $ff)" ]; then
 		uniquefv=false
 	    fi
@@ -52,7 +53,6 @@ case "$*" in
 	;;
 esac
 
-
 cp enc/$ffamily/* enc/
 cp fontinst/$ffamily/* fontinst/
 cp kerning/$ffamily/* kerning/
@@ -69,16 +69,18 @@ echo "Creating PostScript fonts ..."
 for font in otf/$ffamily*.otf
 do
   base=$(basename "$font" .otf)
-  cfftot1    "$font"     "$base.pfb"
-  t1dotlessj --quiet "$base.pfb" "${base}LCDFJ.pfb"
+  cfftot1    "$font"     "pfb/${base}.pfb"
+  t1dotlessj --quiet "pfb/${base}.pfb" "pfb/${base}LCDFJ.pfb"
   rc=$?
   if [ "$rc" -ne "0" ] ; then
       # creation of dotless j failed, probably because dotless j
       # already exists; unfortunately, not always exit code 1 is used
       # in this case so just delete file and hope the best
-      rm "${base}LCDFJ.pfb"
+      rm "pfb/${base}LCDFJ.pfb"
   fi
 done
+
+
 
 echo "Creating TeX metrics ..."
 
@@ -98,7 +100,6 @@ maketfm() {
 
 maketfm $ffamily "$@" $ADDPACK
 
-mv *.pfb pfb
 
 if [ -e maketfm.error ]
 then
